@@ -2,11 +2,11 @@
 
 # 
 
-# A full stack web app to archive and analyze the seasons of the Galactic tournament: 36 teams, 7 competitions (Galactic League, Galactic Cup, Kings League, Galactic Champions Cup, Intergalactic SuperCup, Cup of 8/10 and a Ranking).
+# A full stack web app to generate, archive and analyze the seasons of the Galactic tournament: 36 teams competing across several formats (a league phase, knockout cups, a group-stage Kings League and a seeded Champions Cup).
 
 # 
 
-# I built it as a personal project to practice a complete stack, from data extraction to API to UI, with everything running in containers.
+# I built it as a personal project to practice a complete stack end to end, from a tournament generation engine to the API to the UI, with everything running in containers.
 
 # 
 
@@ -14,19 +14,25 @@
 
 # 
 
-# \- Imports a season from an Excel workbook and extracts every match with a custom parser
-
-# \- Stores the matches in PostgreSQL, tagged by season and competition
-
-# \- Exposes the data through a REST API built with FastAPI
-
-# \- Shows it in a React interface
-
-# \- Exports and imports the archive as JSON, so a database can be backed up and restored
+# The app is organized in tabs:
 
 # 
 
-# The archive currently holds 12 seasons and more than 7,000 matches.
+# \- \*\*Generate season\*\* – draws a full new season. Teams are seeded into 4 pots of 9 based on their ranking, the league calendar is built from precalculated templates that avoid repeating a schedule used in the last 5 seasons, and knockout brackets are generated and filled round by round.
+
+# \- \*\*Import season\*\* – reads a season from an Excel workbook, extracts every match with a custom parser and stores it in the database.
+
+# \- \*\*Seasonal stats\*\* – standings and statistics for a single season, per competition.
+
+# \- \*\*Cumulative stats\*\* – aggregated statistics across all seasons.
+
+# \- \*\*Competitions\*\* – history and results browser across competitions.
+
+# \- \*\*Hall of champions\*\* – the roll of winners season by season.
+
+# 
+
+# When a result is edited, the knockout brackets that depend on it are propagated automatically. The whole archive can be exported and re-imported as JSON. It currently holds 12 seasons and more than 7,000 matches.
 
 # 
 
@@ -58,7 +64,7 @@
 
 # ```bash
 
-# git clone <this-repo-url>
+# git clone https://github.com/SquaSimone/galactic-tournaments.git
 
 # cd galactic-tournaments
 
@@ -72,7 +78,13 @@
 
 # \# create your local environment file from the template
 
-# cp .env.example .env          # on PowerShell: Copy-Item .env.example .env
+# \# PowerShell:
+
+# Copy-Item .env.example .env
+
+# \# bash:
+
+# \# cp .env.example .env
 
 # 
 
@@ -102,9 +114,9 @@
 
 # 
 
-# The folder `sample-data/` contains a JSON file with the matches of one season (`sample-season-1.json`).
+# The folder `sample-data/` contains a JSON file with one full season (`sample-season-1.json`).
 
-# Load it with the import function of the app to see the interface with real content, without needing the original Excel files.
+# Load it from the import function of the app to see the interface populated with real content, without needing the original Excel files.
 
 # 
 
@@ -114,11 +126,17 @@
 
 # ```
 
-# backend/        FastAPI app and the extraction and ranking logic (estrattore.py)
+# backend/        FastAPI app
+
+# &#x20; src/main.py        API endpoints, standings and bracket propagation
+
+# &#x20; src/estrattore.py  Excel parser and extraction logic
+
+# &#x20; src/sorteggio.py   season draw: pots, templates, league phase
 
 # db/             Database init script and migrations
 
-# src/            React frontend
+# src/            React frontend (one file per tab under src/pages/)
 
 # public/         Static assets
 
@@ -128,33 +146,9 @@
 
 # 
 
-# \## How it works
+# \## Notes
 
 # 
 
-# 1\. In the "Import season" tab you upload a season workbook (`Stagione X.xlsm`).
-
-# 2\. The extractor reads all the matches and saves them in the database with `season = X`.
-
-# 3\. The API serves matches and competitions to the frontend.
-
-# 
-
-# \## Roadmap
-
-# 
-
-# \- Tabs for matches, standings, rankings and team history
-
-# \- Automatic tests for the extraction logic
-
-# \- Simple statistics per team and per competition
-
-# 
-
-# \## Screenshots
-
-# 
-
-# (add 2 or 3 screenshots here, for example `!\[Home](docs/home.png)`)
+# This started as a hobby project to manage a tournament I follow, and it grew into a way to practice building a real system: a non-trivial domain engine, a REST API, a relational schema with migrations, and a containerized setup that runs with a single command.
 
