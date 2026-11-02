@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.xlsm
+*.xlsx
+~$*
+.DS_Store
+
+galactic-tournaments-backup.json
+
+galactic-tournaments-backup.json
